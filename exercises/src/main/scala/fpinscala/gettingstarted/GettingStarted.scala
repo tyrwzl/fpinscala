@@ -173,13 +173,13 @@ object PolymorphicFunctions {
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+    (a: A) => ((b: B) => f(a, b))
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 4: Implement `uncurry`
   def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ???
+    (a: A, b: B) => f(a)(b)
 
   /*
   NB: There is a method on the `Function` object in the standard library,
@@ -222,4 +222,21 @@ object TestSort {
 
   }
 
+}
+
+object TestCurry {
+  def main(args: Array[String]): Unit = {
+
+    val x = 3
+    val y = 4
+
+    val f = (x: Int, y: Int) => x + y
+    val f_new = PolymorphicFunctions.uncurry(PolymorphicFunctions.curry(f))
+
+    if (f(x, y) == f_new(x, y))
+      println(true)
+    else
+      println(false)
+
+  }
 }
